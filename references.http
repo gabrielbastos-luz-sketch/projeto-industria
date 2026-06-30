@@ -1,0 +1,33 @@
+###
+
+GET http://localhost:3000/usuarios
+
+###
+
+GET http://localhost:3000/livros
+
+###
+
+POST http://localhost:3000/usuarios
+Content-Type: application/json;
+
+{
+    "nome": "paulo",
+    "email": "paulo2000@gmail.com",
+    "senha": "paulinho3393",
+    "perfil": "ADMIN"
+}
+
+###
+
+POST http://localhost:3000/livros
+Content-Type: application/json;
+
+{
+    "titulo": "diario 3, gravity falls",
+    "autor": "alex hirsch",
+    "categoria": "geek",
+    "isbn": "9788550303628",
+    "quantidade_total": "50",
+    "quantidade_disponivel": "50"
+}
