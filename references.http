@@ -31,3 +31,14 @@ Content-Type: application/json;
     "quantidade_total": "50",
     "quantidade_disponivel": "50"
 }
+
+###
+
+POST http://localhost:3000/login
+Content-Type: application/json;
+
+{
+    "nome": "paulo",
+    "email": "paulo2000@gmail.com",
+    "senha": "paulinho3393"
+}

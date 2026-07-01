@@ -10,7 +10,7 @@ export async function verificarToken(request, reply){
         });
     }
 
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.split({"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibm9tZSI6InBhdWxvIiwicGVyZmlsIjoiQURNSU4iLCJpYXQiOjE3ODI5MTUzMTMsImV4cCI6MTc4Mjk0NDExM30.JiIvF4h9Xdpc5GAmTAlTAlD5Fg5XwZfFunyn_SdyASM"})[1];
 
     try{
 

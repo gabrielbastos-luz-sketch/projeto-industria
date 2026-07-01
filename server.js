@@ -1,6 +1,9 @@
 import fastify from "fastify"
 import { Pool } from "pg"
 import Cors from "@fastify/cors"
+import dotenv from "dotenv";
+
+dotenv.config();
 
 import { verificarToken } from "./authMiddleware.js";
 
@@ -41,8 +44,6 @@ server.post("/login", async (request, reply)=>{
 
     const usuario = resultado.rows[0];
 
-    // depois você verifica a senha...
-
     const token = jwt.sign(
 
         {
@@ -70,10 +71,21 @@ server.get("/usuarios", async ()=>{
     return resultado.rows
 })
 
-server.get("/livros", async ()=>{
-    const resultado = await sql.query("select * from livros")
-    return resultado.rows
-})
+server.get(
+    "/livros",
+    {
+        preHandler: verificarToken
+    },
+    async ()=>{
+
+        const resultado = await sql.query(
+            "SELECT * FROM livros"
+        );
+
+        return resultado.rows;
+
+    }
+);
 
 server.post("/usuarios", async (request, reply)=>{
     const {nome, email, senha, perfil} = request.body;
