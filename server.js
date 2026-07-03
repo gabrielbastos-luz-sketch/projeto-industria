@@ -15,8 +15,8 @@ const sql = new Pool({
     database: "biblioteca_db",
     host: "localhost",
     user: "postgres",
-    password: "senai",
-    port: 5432
+    password: "2203",
+    port: 5433
 })
 
 server.register(Cors, {
@@ -25,39 +25,33 @@ server.register(Cors, {
 })
 
 
-server.post("/login", async (request, reply)=>{
+server.post("/login", async (request, reply) => {
 
-    const {email, senha} = request.body;
+    const { email, senha } = request.body;
 
     const resultado = await sql.query(
-        "SELECT * FROM usuarios WHERE email = $1",
-        [email]
+        "SELECT * FROM usuarios WHERE email = $1 AND senha = $2",
+        [email, senha]
     );
 
-    if(resultado.rows.length === 0){
-
+    if (resultado.rows.length === 0) {
         return reply.status(401).send({
-            message:"Usuário não encontrado."
+            message: "Usuário não encontrado."
         });
-
     }
 
     const usuario = resultado.rows[0];
 
     const token = jwt.sign(
-
         {
             id: usuario.id,
             nome: usuario.nome,
             perfil: usuario.perfil
         },
-
         process.env.JWT_SECRET,
-
         {
-            expiresIn: "8h"
+            expiresIn: process.env.JWT_EXPIRES_IN
         }
-
     );
 
     return reply.send({
@@ -66,10 +60,24 @@ server.post("/login", async (request, reply)=>{
 
 });
 
-server.get("/usuarios", async ()=>{
-    const resultado = await sql.query("select * from usuarios")
-    return resultado.rows
-})
+server.get(
+    "/usuarios",
+    {
+        preHandler: verificarToken
+    },
+    async (request, reply) => {
+
+        const { id } = request.usuario;
+
+        const resultado = await sql.query(
+            "SELECT id, nome, email, perfil FROM usuarios WHERE id = $1",
+            [id]
+        );
+
+        return resultado.rows[0];
+
+    }
+);
 
 server.get(
     "/livros",

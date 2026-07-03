@@ -1,18 +1,18 @@
 import jwt from "jsonwebtoken";
 
-export async function verificarToken(request, reply){
+export async function verificarToken(request, reply) {
 
     const authHeader = request.headers.authorization;
 
-    if(!authHeader){
+    if (!authHeader) {
         return reply.status(401).send({
-            message:"Token não informado."
+            message: "Token não informado."
         });
     }
 
-    const token = authHeader.split({"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibm9tZSI6InBhdWxvIiwicGVyZmlsIjoiQURNSU4iLCJpYXQiOjE3ODI5MTUzMTMsImV4cCI6MTc4Mjk0NDExM30.JiIvF4h9Xdpc5GAmTAlTAlD5Fg5XwZfFunyn_SdyASM"})[1];
+    const token = authHeader.split(" ")[1];
 
-    try{
+    try {
 
         const usuario = jwt.verify(
             token,
@@ -21,10 +21,10 @@ export async function verificarToken(request, reply){
 
         request.usuario = usuario;
 
-    }catch{
+    } catch {
 
         return reply.status(401).send({
-            message:"Token inválido."
+            message: "Token inválido."
         });
 
     }
